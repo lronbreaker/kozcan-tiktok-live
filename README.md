@@ -1,23 +1,18 @@
-# Közcan TikTok LIVE bridge
+# Közcan TikTok LIVE bridge (free connector)
 
-Node.js 20+ service that listens to the public LIVE for `TIKTOK_USERNAME` and relays chat/gift events to browser clients over WebSocket at `/ws`.
+This version replaces `tiktok-live-connector` / EulerStream with `piratetok-live-js`, which documents a direct TikTok WebSocket connection without API keys or a signing server. It is unofficial and may stop working if TikTok changes its protocol.
 
-## Environment
-- `TIKTOK_USERNAME`: creator username without `@` (default: `oguzmaverick`)
-- `PORT`: hosting platform port (default: `3000`)
+## Render settings
+- Runtime: Node
+- Node version: 22.19 or newer (declared in `package.json`)
+- Build command: `npm install`
+- Start command: `npm start`
+- Environment variable: `TIKTOK_USERNAME=oguzmaverick`
 
-## Run
-```bash
-npm install
-npm start
-```
+## Endpoints
+- `/health` reports bridge status.
+- `/ws` broadcasts `bridge_status`, `kozcan_tiktok_chat`, `kozcan_tiktok_join`, and `kozcan_tiktok_gift` events.
 
-`GET /health` reports bridge status. WebSocket clients connect to `wss://YOUR-HOST/ws`.
+Chat comments containing a single number from 1 to 20 are forwarded as lane join requests. Gifts are normalized to `rose`, `bouquet`, or `doctor` for the Közcan game.
 
-Events sent to browser:
-- `kozcan_tiktok_chat`: `{ username, nickname, comment }`
-- `kozcan_tiktok_join`: `{ username, lane }` when a comment is only a lane number 1–20
-- `kozcan_tiktok_gift`: `{ username, nickname, giftName, giftType, diamondCount, repeatCount, giftId }`
-- `bridge_status`: connection status
-
-This uses `tiktok-live-connector`, an unofficial reverse-engineered client. It is not affiliated with TikTok, may stop working if TikTok changes its protocol, and only connects while the creator is LIVE. Do not add TikTok passwords, session cookies, or private credentials to this repository.
+No TikTok password, session cookie, or verification code is required.
