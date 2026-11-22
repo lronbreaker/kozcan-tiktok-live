@@ -45,7 +45,8 @@ async function startTikTok() {
   setStatus('connecting');
   try {
     client = new TikTokLiveClient(USERNAME).region('TR').language('tr');
-    client.on(EventType.chat, (data) => {
+    client.on(EventType.chat, (data) => { 
+      console.log('[CHAT RAW]', data);
       const username = data?.user?.uniqueId || data?.user?.unique_id;
       const comment = String(data?.content || '').trim();
       if (!username || !comment) return;
@@ -56,7 +57,8 @@ async function startTikTok() {
         if (lane >= 1 && lane <= 20) broadcast({ type: 'kozcan_tiktok_join', username, lane });
       }
     });
-    client.on(EventType.gift, (data) => {
+    client.on(EventType.gift, (data) => { 
+      console.log('[GIFT RAW]', data);
       const username = data?.user?.uniqueId || data?.user?.unique_id;
       if (!username) return;
       const streak = streaks.process(data);
